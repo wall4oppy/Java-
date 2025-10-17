@@ -35,7 +35,7 @@
 ### 線上使用
 直接訪問 GitHub Pages：
 ```
-https://[your-username].github.io/java-exam-system/
+https://wall4oppy.github.io/Java-/
 ```
 
 ### 本地運行
