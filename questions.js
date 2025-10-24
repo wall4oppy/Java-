@@ -441,6 +441,7 @@ public class JPA03 {
             jpd: `import java.util.Scanner;
 public class JPD03 {
     
+
     
     public static void main(String[] args) {
         int total = 0;
@@ -453,8 +454,8 @@ public class JPD03 {
 	...
 
         }
-        System.out.println("餐費總費用:" + total);
-        System.out.printf(" %d 次餐費的平均費用: %.2f %n", count, average);
+        System.out.println("餐點總費用:"________);
+        System.out.printf(" %d 道餐點平均費用為: %.2f %n"____________);
     }
 }`
         },
@@ -531,15 +532,13 @@ public class JPD03 {
     public static void main(String[] args) {
         int total = 0, s = 0;
         
-        do {
-          System.out.print("請輸入金額，若輸入-1則停止：");
-          s = keyboard.nextInt();
-          if( s != -1)
-            total = total + s;
-        } while (s != -1);
-        System.out.println("零錢筒內的金額為：" + total);
+
+	...
+
+
     }
-}`
+}
+`
         },
         {
             id: '310',
@@ -1016,14 +1015,19 @@ function getRandomQuestion(selectedCategory = 'all') {
         }
     }
     
-    // 使用更隨機的算法
-    const randomCategory = availableCategories[Math.floor(Math.random() * availableCategories.length)];
+    // 使用更隨機的算法選擇類別
+    const categoryTimeSeed = Date.now() % 1000;
+    const categoryRandomSeed = Math.random() * 1000;
+    const combinedCategorySeed = (categoryTimeSeed + categoryRandomSeed) % availableCategories.length;
+    const randomCategory = availableCategories[Math.floor(combinedCategorySeed)];
     const categoryQuestions = questions[randomCategory];
     
-    // 增加隨機性：使用時間戳和隨機數組合
-    const timeSeed = Date.now() % 1000;
-    const randomSeed = Math.random() * 1000;
-    const combinedSeed = (timeSeed + randomSeed) % categoryQuestions.length;
+    // 使用多重隨機種子增加隨機性
+    const questionTimeSeed = Date.now() % 1000;
+    const questionRandomSeed1 = Math.random() * 1000;
+    const questionRandomSeed2 = Math.random() * 1000;
+    const performanceSeed = performance.now() % 1000;
+    const combinedSeed = (questionTimeSeed + questionRandomSeed1 + questionRandomSeed2 + performanceSeed) % categoryQuestions.length;
     const randomIndex = Math.floor(combinedSeed);
     
     return {
@@ -1054,10 +1058,17 @@ function getRandomQuestions(selectedCategory = 'all', questionCount = '1') {
     const result = [];
     
     if (questionCount === 'each') {
-        // 每類各抽一題
+        // 每類各抽一題，使用更強的隨機性
         availableCategories.forEach(category => {
             if (questions[category] && questions[category].length > 0) {
-                const randomIndex = Math.floor(Math.random() * questions[category].length);
+                // 使用多重隨機種子
+                const timeSeed = Date.now() % 1000;
+                const randomSeed1 = Math.random() * 1000;
+                const randomSeed2 = Math.random() * 1000;
+                const categorySeed = category.charCodeAt(0) % 1000;
+                const combinedSeed = (timeSeed + randomSeed1 + randomSeed2 + categorySeed) % questions[category].length;
+                const randomIndex = Math.floor(combinedSeed);
+                
                 result.push({
                     category: category,
                     question: questions[category][randomIndex]
@@ -1081,8 +1092,26 @@ function getRandomQuestions(selectedCategory = 'all', questionCount = '1') {
             }
         });
         
-        // 隨機抽取指定數量
-        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        // 使用 Fisher-Yates 洗牌算法進行更徹底的隨機打亂
+        const shuffled = [...allQuestions];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            // 使用多個隨機種子增加隨機性
+            const timeSeed = Date.now() % 1000;
+            const randomSeed = Math.random() * 1000;
+            const combinedSeed = (timeSeed + randomSeed + i) % (i + 1);
+            const j = Math.floor(combinedSeed);
+            
+            // 交換元素
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        // 再次進行部分洗牌以增加隨機性
+        for (let i = 0; i < Math.min(count * 2, shuffled.length); i++) {
+            const randomIndex = Math.floor(Math.random() * shuffled.length);
+            const currentIndex = i % shuffled.length;
+            [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
+        }
+        
         const selectedQuestions = shuffled.slice(0, Math.min(count, allQuestions.length));
         
         result.push(...selectedQuestions);
