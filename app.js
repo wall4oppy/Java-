@@ -54,20 +54,23 @@ function loadQuestion(questionData) {
     // 添加 no-scroll class 以禁用滾動
     document.body.classList.add('no-scroll');
     
-    // 隨機顯示效果
+    // 更新標題
     const questionElement = document.getElementById('current-question');
-    questionElement.style.opacity = '0';
-    questionElement.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        // 更新題目資訊
-        questionElement.textContent = `第 ${questionData.category} 類 - 題目 ${questionData.question.id}`;
-        questionElement.style.opacity = '1';
-        questionElement.style.transform = 'translateY(0)';
-    }, 200);
+    if (questionElement) {
+        questionElement.style.opacity = '0';
+        questionElement.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+            questionElement.textContent = `第 ${questionData.category} 類 - 題目 ${questionData.question.id}`;
+            questionElement.style.opacity = '1';
+            questionElement.style.transform = 'translateY(0)';
+        }, 100);
+    }
     
     // 設定編輯器內容
-    answerEditor.setValue(questionData.question.jpd);
+    if (answerEditor) {
+        answerEditor.setValue(questionData.question.jpd);
+    }
     
     // 隱藏結果區域
     document.getElementById('result-section').classList.add('hidden');
@@ -93,10 +96,14 @@ function showQuestionList(questionsData) {
     
     // 更新標題
     const questionElement = document.getElementById('current-question');
-    questionElement.textContent = `已抽取 ${questionsData.length} 題`;
+    if (questionElement) {
+        questionElement.textContent = `已抽取 ${questionsData.length} 題`;
+    }
     
     // 清空編輯器
-    answerEditor.setValue('// 請從下方題目列表中選擇要練習的題目');
+    if (answerEditor) {
+        answerEditor.setValue('// 請從下方題目列表中選擇要練習的題目');
+    }
     
     // 停止計時
     stopTimer();
@@ -178,7 +185,7 @@ document.getElementById('random-btn').addEventListener('click', () => {
 
 // 重置答案
 document.getElementById('reset-btn').addEventListener('click', () => {
-    if (currentQuestion) {
+    if (currentQuestion && answerEditor) {
         answerEditor.setValue(currentQuestion.question.jpd);
         document.getElementById('result-section').classList.add('hidden');
         // 重新添加 no-scroll class
