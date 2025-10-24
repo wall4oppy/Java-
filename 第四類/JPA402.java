@@ -7,8 +7,8 @@ public class JPA04 {
       n = keyboard.nextInt();
       while(n != 999)
       { if(n >= 0 && n<= 16)
-        { System.out.printf("%d ªº¶¥­¼(§ÀºÝ»¼°j) = %d\n", n, F(n,1));
-          System.out.printf("%d ªº¶¥­¼(°j°é) = %d\n", n, G(n,1));
+        { System.out.printf("%d ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ý»ï¿½ï¿½j) = %d\n", n, F(n,1));
+          System.out.printf("%d ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½jï¿½ï¿½) = %d\n", n, G(n,1));
         }
         System.out.print("Input n (0 <= n <= 16):");
         n = keyboard.nextInt();

@@ -121,11 +121,12 @@ body.no-scroll .container {
     gap: 12px;
     letter-spacing: -0.5px;
     margin: 0;
-    padding: 10px 16px;
+    padding: 10px 6px;
     background-color: rgba(166, 77, 57, 0.08);
     border-radius: 14px;
     border: 2px solid rgba(166, 77, 57, 0.15);
     box-shadow: 0 4px 12px rgba(166, 77, 57, 0.1);
+    width: calc(100% - 10px);
 }
 
 
@@ -813,6 +814,207 @@ body.no-scroll .container {
     }
 }
 
+/* Question List */
+.question-list-container {
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #e5ddd4 0%, #cbc0b6 100%);
+    border-radius: 16px;
+    padding: 20px;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 16px var(--shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.question-list-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+}
+
+.question-list-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.3px;
+}
+
+.question-list-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 500;
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.question-item {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 8px var(--shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.question-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(166, 77, 57, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.question-item:hover::before {
+    left: 100%;
+}
+
+.question-item:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 8px 24px var(--primary-glow),
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.question-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.question-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.question-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+}
+
+.question-id {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.question-arrow {
+    color: var(--primary);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.question-item:hover .question-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+/* Answer Display */
+.answer-display {
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #e5ddd4 0%, #cbc0b6 100%);
+    border-radius: 16px;
+    padding: 20px;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 16px var(--shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.answer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+}
+
+.answer-header svg {
+    color: var(--primary);
+    filter: drop-shadow(0 2px 4px var(--primary-glow));
+}
+
+.answer-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.answer-code {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0;
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 8px var(--shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+}
+
+.answer-code .CodeMirror {
+    height: auto;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    line-height: 1.5;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.answer-code .CodeMirror-gutters {
+    border-right: 2px solid var(--border);
+    background: linear-gradient(180deg, #fafbfc 0%, #ffffff 100%);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.answer-code .CodeMirror-linenumber {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.answer-code .CodeMirror-scroll {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+.answer-code .CodeMirror-sizer {
+    overflow: visible !important;
+}
+
+.answer-code .CodeMirror-lines {
+    overflow: visible !important;
+}
+
 /* Stats */
 .stats {
     display: flex;
@@ -1023,6 +1225,8 @@ body.no-scroll .container {
         text-align: center;
         font-size: 16px;
         gap: 8px;
+        width: calc(100% - 10px);
+        padding: 10px 6px;
     }
 
     .title svg {
@@ -1207,6 +1411,76 @@ body.no-scroll .container {
         padding: 12px;
     }
 
+    .answer-display {
+        margin-bottom: 16px;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .answer-header {
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    .answer-header h3 {
+        font-size: 16px;
+    }
+
+    .answer-code {
+        border-radius: 10px;
+    }
+
+    .answer-code .CodeMirror {
+        font-size: 12px;
+        line-height: 1.4;
+        border-radius: 8px;
+    }
+
+    .answer-code .CodeMirror-gutters {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+
+    .question-list-container {
+        margin-bottom: 16px;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .question-list-header h3 {
+        font-size: 18px;
+    }
+
+    .question-list-header p {
+        font-size: 13px;
+    }
+
+    .question-item {
+        padding: 12px 16px;
+        border-radius: 10px;
+    }
+
+    .question-number {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        margin-right: 12px;
+    }
+
+    .question-title {
+        font-size: 14px;
+    }
+
+    .question-id {
+        font-size: 12px;
+    }
+
+    .question-arrow svg {
+        width: 16px;
+        height: 16px;
+    }
+
     /* 滾動條樣式 */
     ::-webkit-scrollbar {
         width: 8px;
@@ -1288,6 +1562,8 @@ body.no-scroll .container {
     .title {
         font-size: 14px;
         gap: 6px;
+        width: calc(100% - 10px);
+        padding: 10px 6px;
     }
 
     .title svg {
@@ -1435,5 +1711,75 @@ body.no-scroll .container {
     .diff-line-number {
         min-width: 25px;
         margin-right: 6px;
+    }
+
+    .answer-display {
+        margin-bottom: 12px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .answer-header {
+        gap: 6px;
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+    }
+
+    .answer-header h3 {
+        font-size: 14px;
+    }
+
+    .answer-code {
+        border-radius: 8px;
+    }
+
+    .answer-code .CodeMirror {
+        font-size: 11px;
+        line-height: 1.35;
+        border-radius: 6px;
+    }
+
+    .answer-code .CodeMirror-gutters {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .question-list-container {
+        margin-bottom: 12px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .question-list-header h3 {
+        font-size: 16px;
+    }
+
+    .question-list-header p {
+        font-size: 12px;
+    }
+
+    .question-item {
+        padding: 10px 12px;
+        border-radius: 8px;
+    }
+
+    .question-number {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+        margin-right: 10px;
+    }
+
+    .question-title {
+        font-size: 13px;
+    }
+
+    .question-id {
+        font-size: 11px;
+    }
+
+    .question-arrow svg {
+        width: 14px;
+        height: 14px;
     }
 }

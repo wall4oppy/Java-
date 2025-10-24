@@ -281,6 +281,59 @@ public class JPD02 {
 }`
         },
         {
+            id: '208',
+            name: 'JPA208',
+            jpa: `import java.util.*;
+
+class JPA02 {
+
+    static Scanner keyboard = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        test();
+        test();
+        test();
+        test();
+        test();
+    }
+
+    public static void test() {
+        int x;
+        System.out.println("Input:");
+        x = keyboard.nextInt();
+
+        if(x >= 90)
+           System.out.println("Your grade is A");
+        else
+           if(x >= 80)
+             System.out.println("Your grade is B");
+           else
+             if(x >= 70)
+               System.out.println("Your grade is C");
+             else
+               if(x>=60)
+                 System.out.println("Your grade is D");
+               else
+                 System.out.println("Your grade is F");  
+    }
+}`,
+            jpd: `import java.util.*;
+class JPD02 {
+    static Scanner keyboard = new Scanner(System.in);
+    public static void main(String[] args) {
+        test();
+        test();
+        test();
+        test();
+        test();
+    }
+
+    public static void test() {
+        ...
+    }
+}`
+        },
+        {
             id: '210',
             name: 'JPA210',
             jpa: `import java.util.*;
@@ -381,8 +434,8 @@ public class JPA03 {
             break; 
 	}
         average = (double)total / count;
-        System.out.println("餐費總金額:" + total);
-        System.out.printf(" %d 次餐費的平均金額: %.2f %n", count, average);
+        System.out.println("餐費總費用:" + total);
+        System.out.printf(" %d 次餐費的平均費用: %.2f %n", count, average);
     }
 }`,
             jpd: `import java.util.Scanner;
@@ -400,8 +453,8 @@ public class JPD03 {
 	...
 
         }
-        System.out.println("餐費總金額:"________);
-        System.out.printf(" %d 次餐費的平均金額: %.2f %n"____________);
+        System.out.println("餐費總費用:" + total);
+        System.out.printf(" %d 次餐費的平均費用: %.2f %n", count, average);
     }
 }`
         },
@@ -469,7 +522,8 @@ public class JPA03 {
         } while (s != -1);
         System.out.println("零錢筒內的金額為：" + total);
     }
-}`,
+}
+`,
             jpd: `import java.util.Scanner;
 public class JPD03 {
     static Scanner keyboard = new Scanner(System.in);
@@ -477,10 +531,13 @@ public class JPD03 {
     public static void main(String[] args) {
         int total = 0, s = 0;
         
-
-	...
-
-
+        do {
+          System.out.print("請輸入金額，若輸入-1則停止：");
+          s = keyboard.nextInt();
+          if( s != -1)
+            total = total + s;
+        } while (s != -1);
+        System.out.println("零錢筒內的金額為：" + total);
     }
 }`
         },
@@ -527,49 +584,47 @@ public class JPD03 {
 public class JPA04 {
     static Scanner keyboard = new Scanner(System.in);
     public static void main(String args[]) {
-      int n =0;
-      System.out.print("Input n (0 <= n <= 16):");  
-      n = keyboard.nextInt();
-      while(n != 999)
-      { if(n >= 0 && n<= 16)
-        { System.out.printf("%d 階乘(遞迴) = %d\\n", n, F(n,1));
-          System.out.printf("%d 階乘(迴圈) = %d\\n", n, G(n,1));
-        }
+        int n =0;
         System.out.print("Input n (0 <= n <= 16):");
         n = keyboard.nextInt();
-      }
+        while(n != 999)
+        { if(n >= 0 && n<= 16)
+          { System.out.printf("%d 的階乘(尾端遞迴) = %d\\n", n, F(n,1));
+            System.out.printf("%d 的階乘(迴圈) = %d\\n", n, G(n,1));
+          }
+          System.out.print("Input n (0 <= n <= 16):");
+          n = keyboard.nextInt();
+        }
     }
     
     static int F(int n, int r)
     { if(n == 0)
         return r;
       else
-        return F((n - 1), (r * n)); 
+        return F((n - 1), (r * n));
     }
 
     static int G(int n, int r) {
-       for(int i = n; i >=1; i--)
+        for(int i = n; i >=1; i--)
             r = r * i;
-       return r;
+        return r;
     }
 }`,
             jpd: `import java.util.Scanner;
 public class JPD04 {
     static Scanner keyboard = new Scanner(System.in);
     public static void main(String args[]) {
-      
-      ...
+        
+    ...
+
 
     }
     
-    static int F(int n, int r)
-    { 
-      ...
-    }
+    
+    ...
 
-    static int G(int n, int r) {
-       ...
-    }
+
+
 }`
         },
         {
@@ -585,7 +640,6 @@ public class JPA04 {
       while(m != 999) 
       { System.out.print("Input n:");
         n = keyboard.nextInt();
-
         System.out.printf("最大公因數為：%d\\n", F(m,n));
         System.out.print("Input m:");
         m = keyboard.nextInt();
@@ -602,66 +656,17 @@ public class JPA04 {
 public class JPD04 {
     static Scanner keyboard = new Scanner(System.in);
     public static void main(String args[]) {
-      int m, n, temp;      
-      System.out.print("Input m:");
-      m = keyboard.nextInt();
-      while(m != 999) 
-      { System.out.print("Input n:");
-        n = keyboard.nextInt();
-
-        System.out.printf("最大公因數為：%d\\n", F(m,n));
-        System.out.print("Input m:");
-        m = keyboard.nextInt();
-      }
-    }
-    static int F(int m, int n) {
+        
       ...
-   }
-}`
-        },
-        {
-            id: '406',
-            name: 'JPA406',
-            jpa: `import java.util.Scanner;
-public class JPA04 
-{
-  static Scanner keyboard = new Scanner(System.in);
-  public static void main(String args[]) {
-     String s, c; 
-     System.out.print("Input a string: ");
-     s = keyboard.nextLine();
-     System.out.printf("%s\\n", reverse(s));
-     System.out.print("Input a string: ");
-     s = keyboard.nextLine();
-     System.out.printf("%s\\n", reverse(s));
- }
-  static String reverse(String str)
-  {
-     if (str.equals(""))
-        return "";
-     else
-        return reverse(str.substring(1)) + str.substring(0, 1);
-    }
-}`,
-            jpd: `import java.util.Scanner;
-public class JPD04 {
-    static Scanner keyboard = new Scanner(System.in);
-    public static void main(String args[]) {
-        String s, c; 
-        System.out.print("Input a string: ");
-        s = keyboard.nextLine();
-        System.out.printf("%s\\n", reverse(s));
-        System.out.print("Input a string: ");
-        s = keyboard.nextLine();
-        System.out.printf("%s\\n", reverse(s));
+
     }
     
     ...
 }`
         },
         {
-            id: '408',
-            name: 'JPA408',
+            id: '406',
+            name: 'JPA406',
             jpa: `import java.util.Scanner;
 public class JPA04 {
     static Scanner keyboard = new Scanner(System.in);
@@ -700,6 +705,46 @@ public class JPD04 {
       ...
  
       }
+}`
+        },
+        {
+            id: '408',
+            name: 'JPA408',
+            jpa: `import java.util.Scanner;
+public class JPA04 
+{
+  static Scanner keyboard = new Scanner(System.in);
+  public static void main(String args[]) {
+     String s, c; 
+     System.out.print("Input a string: ");
+     s = keyboard.nextLine();
+     System.out.printf("%s\\n", reverse(s));
+     System.out.print("Input a string: ");
+     s = keyboard.nextLine();
+     System.out.printf("%s\\n", reverse(s));
+ }
+  static String reverse(String str)
+  {
+     if (str.equals(""))
+        return "";
+     else
+        return reverse(str.substring(1)) + str.substring(0, 1);
+    }
+}`,
+            jpd: `import java.util.Scanner;
+public class JPD04 {
+    static Scanner keyboard = new Scanner(System.in);
+    public static void main(String args[]) {
+        String s, c; 
+        System.out.print("Input a string: ");
+        s = keyboard.nextLine();
+        System.out.printf("%s\\n", reverse(s));
+        System.out.print("Input a string: ");
+        s = keyboard.nextLine();
+        System.out.printf("%s\\n", reverse(s));
+    }
+    
+    ...
 }`
         },
         {
@@ -755,16 +800,16 @@ public class JPA05 {
     public static Scanner keyboard = new Scanner(System.in);
     
     public static void main(String args[]) {
-        System.out.print("請輸入資料個數：");
+        System.out.print("請輸入學生人數：");
         int n = keyboard.nextInt();
         float [] A = new float[n];
         for(int i = 0; i < A.length; i++) {
-          System.out.printf("第%d個資料：", i+1);
+          System.out.printf("第%d個學生的成績：", i+1);
           A[i] = keyboard.nextFloat();
         }
         float sum = 0.0f;
         float average;
-        for(int i = 0; i < A.length; i++) {
+        for(int i = 0; i < n; i++) {
            sum = sum + A[i];
         }
         average = sum / n;
@@ -772,21 +817,21 @@ public class JPA05 {
         System.out.printf("總和：%f\\n", sum);
         System.out.printf("平均：%f\\n", average);
     }
-}`,
+}
+`,
             jpd: `import java.util.Scanner;
 public class JPD05 {
     public static Scanner keyboard = new Scanner(System.in);
     
     public static void main(String args[]) {
-        System.out.print("請輸入資料個數：");
+        System.out.print("請輸入學生人數：");
         
-
-
+        ...
         }
        
-
     }
-}`
+}
+`
         },
         {
             id: '504',
@@ -805,20 +850,18 @@ public class JPA05 {
            for(int i = 0; i< F.length; i++)
              System.out.printf("%d\\n", F[i]);
     }
-}`,
+}
+`,
             jpd: `import java.util.Scanner;
 public class JPD05 {
     public static Scanner keyboard = new Scanner(System.in);
     
 	public static void main(String[] argv) {
         
-        
-        
-        
-        
-
+        ...
     }
-}`
+}
+`
         },
         {
             id: '506',
@@ -836,7 +879,8 @@ public class JPD05 {
              sum = sum + A[i][j][k];                        
        System.out.printf("sum = %d\\n", sum);
     }
-}`,
+}
+`,
             jpd: `public class JPD05 {
     public static void main(String[] argv) {
        int sum =0;
@@ -844,9 +888,8 @@ public class JPD05 {
                        {{7,8,9},{10,11,12}},
                        {{13,14,15},{16,17,18}},
                        {{19,20,21},{22,23,24}}};
-                               
        
-
+       ...
        
        System.out.printf("sum = %d\\n", sum);
     }
@@ -857,7 +900,7 @@ public class JPD05 {
             name: 'JPA508',
             jpa: `public class JPA05 {
     public static void main(String[] argv) {
-        int[] data = {2, 4, 3, 5, 7, 6, 9, 1};  // 未排序的陣列
+        int[] data = {2, 4, 3, 5, 7, 6, 9, 1};
         int temp;
         for(int i = 0; i < data.length-1; i++) {
           for(int j = 0; j < data.length-i-1; j++) {
@@ -872,13 +915,15 @@ public class JPD05 {
           System.out.printf("\\n");
         }
     }
-}`,
+}
+`,
             jpd: `public class JPD05 {
     public static void main(String[] argv) {
-        int[] data = {2, 4, 3, 5, 7, 6, 9, 1};  // 未排序的陣列
+        int[] data = {2, 4, 3, 5, 7, 6, 9, 1};
         ...
     }
-}`
+}
+`
         },
         {
             id: '510',
@@ -893,9 +938,9 @@ public class JPA05 {
     }
     
     public static void search() {
-        int[] data = {5, 9, 13, 15, 17, 19, 25, 30, 45}; // 已排序陣列
+        int[] data = {5, 9, 13, 15, 17, 19, 25, 30, 45};
 
-        System.out.print("請輸入要搜尋的資料：");
+        System.out.print("請輸入要找尋的資料：");
 
         int target = keyboard.nextInt();
         int start, stop,mid, count;
@@ -938,15 +983,16 @@ public class JPD05 {
     }
     
     public static void search() {
-        int[] data = {5, 9, 13, 15, 17, 19, 25, 30, 45}; // 已排序陣列
+        int[] data = {5, 9, 13, 15, 17, 19, 25, 30, 45};
 
-        System.out.print("請輸入要搜尋的資料：");
+        System.out.print("請輸入要找尋的資料：");
 
         int target = keyboard.nextInt();
     
         ...
     }
-}`
+}
+`
         }
     ]
 };
@@ -984,5 +1030,64 @@ function getRandomQuestion(selectedCategory = 'all') {
         category: randomCategory,
         question: categoryQuestions[randomIndex]
     };
+}
+
+// 多題隨機抽題函數
+function getRandomQuestions(selectedCategory = 'all', questionCount = '1') {
+    let availableCategories;
+    
+    if (selectedCategory === 'all') {
+        // 從所有類別中選擇
+        availableCategories = Object.keys(questions);
+    } else {
+        // 只從選定的類別中選擇
+        if (questions[selectedCategory]) {
+            availableCategories = [selectedCategory];
+        } else {
+            // 如果選定的類別不存在，顯示警告並從所有類別中選擇
+            console.warn(`類別 ${selectedCategory} 尚未匯入`);
+            alert(`第 ${selectedCategory} 類題目尚未匯入，將從現有類別隨機抽題`);
+            availableCategories = Object.keys(questions);
+        }
+    }
+    
+    const result = [];
+    
+    if (questionCount === 'each') {
+        // 每類各抽一題
+        availableCategories.forEach(category => {
+            if (questions[category] && questions[category].length > 0) {
+                const randomIndex = Math.floor(Math.random() * questions[category].length);
+                result.push({
+                    category: category,
+                    question: questions[category][randomIndex]
+                });
+            }
+        });
+    } else {
+        // 從選定範圍中抽取指定數量
+        const count = parseInt(questionCount);
+        const allQuestions = [];
+        
+        // 收集所有可用題目
+        availableCategories.forEach(category => {
+            if (questions[category]) {
+                questions[category].forEach(question => {
+                    allQuestions.push({
+                        category: category,
+                        question: question
+                    });
+                });
+            }
+        });
+        
+        // 隨機抽取指定數量
+        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        const selectedQuestions = shuffled.slice(0, Math.min(count, allQuestions.length));
+        
+        result.push(...selectedQuestions);
+    }
+    
+    return result;
 }
 

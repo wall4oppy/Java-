@@ -83,6 +83,70 @@ function loadQuestion(questionData) {
     }, scrollDelay);
 }
 
+// 顯示題目列表
+function showQuestionList(questionsData) {
+    // 移除 no-scroll class 以允許滾動
+    document.body.classList.remove('no-scroll');
+    
+    // 隱藏結果區域
+    document.getElementById('result-section').classList.add('hidden');
+    
+    // 更新標題
+    const questionElement = document.getElementById('current-question');
+    questionElement.textContent = `已抽取 ${questionsData.length} 題`;
+    
+    // 清空編輯器
+    answerEditor.setValue('// 請從下方題目列表中選擇要練習的題目');
+    
+    // 停止計時
+    stopTimer();
+    resetTimer();
+    
+    // 創建題目列表HTML
+    let listHTML = `
+        <div class="question-list-container">
+            <div class="question-list-header">
+                <h3>抽取的題目列表</h3>
+                <p>共 ${questionsData.length} 題，點擊題目開始練習</p>
+            </div>
+            <div class="question-list">
+    `;
+    
+    questionsData.forEach((questionData, index) => {
+        listHTML += `
+            <div class="question-item" onclick="loadQuestion(${JSON.stringify(questionData).replace(/"/g, '&quot;')})">
+                <div class="question-number">${index + 1}</div>
+                <div class="question-info">
+                    <div class="question-title">第 ${questionData.category} 類 - ${questionData.question.name}</div>
+                    <div class="question-id">題目編號: ${questionData.question.id}</div>
+                </div>
+                <div class="question-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+        `;
+    });
+    
+    listHTML += `
+            </div>
+        </div>
+    `;
+    
+    // 顯示題目列表
+    const resultSection = document.getElementById('result-section');
+    const resultContent = document.getElementById('result-content');
+    
+    resultSection.classList.remove('hidden', 'success', 'error');
+    resultContent.innerHTML = listHTML;
+    
+    // 捲動到列表
+    setTimeout(() => {
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
+
 // 隨機抽題
 document.getElementById('random-btn').addEventListener('click', () => {
     // 增加隨機動畫效果
@@ -98,8 +162,16 @@ document.getElementById('random-btn').addEventListener('click', () => {
         const randomDelay = Math.random() * 500;
         setTimeout(() => {
             const selectedCategory = document.getElementById('category-select').value;
-            const questionData = getRandomQuestion(selectedCategory);
-            loadQuestion(questionData);
+            const questionCount = document.getElementById('question-count-select').value;
+            const questionsData = getRandomQuestions(selectedCategory, questionCount);
+            
+            if (questionsData.length === 1) {
+                // 單題模式，直接載入
+                loadQuestion(questionsData[0]);
+            } else {
+                // 多題模式，顯示題目列表
+                showQuestionList(questionsData);
+            }
         }, randomDelay);
     }, 150);
 });
@@ -196,27 +268,56 @@ function displayResult(result) {
     } else {
         resultSection.classList.add('error');
         resultContent.innerHTML = `
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">${result.totalLines}</div>
-                    <div class="stat-label">總行數</div>
+            <div class="answer-display">
+                <div class="answer-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                    <h3>正確答案 (${currentQuestion.question.name})</h3>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">${result.totalDifferences}</div>
-                    <div class="stat-label">錯誤行數</div>
+                <div class="answer-code">
+                    <div id="answer-code-editor"></div>
                 </div>
             </div>
             <div class="diff-container">
                 ${generateDiffHTML(result.differences)}
             </div>
-            <div class="error-summary">
-                ⚠ 請修正以上 ${result.totalDifferences} 個錯誤後重新送出
-            </div>
         `;
     }
     
-    // 捲動到結果區域
+    // 初始化答案程式碼編輯器（只讀）
     setTimeout(() => {
+        const answerCodeEditor = document.getElementById('answer-code-editor');
+        if (answerCodeEditor && !result.isCorrect) {
+            // 清除可能存在的舊編輯器
+            answerCodeEditor.innerHTML = '';
+            
+            // 創建只讀的 CodeMirror 編輯器
+            const answerEditor = CodeMirror(answerCodeEditor, {
+                mode: 'text/x-java',
+                theme: 'default',
+                lineNumbers: true,
+                indentUnit: 4,
+                indentWithTabs: false,
+                value: currentQuestion.question.jpa,
+                lineWrapping: true,
+                readOnly: true,
+                cursorBlinkRate: 0,
+                scrollbarStyle: 'null',
+                viewportMargin: Infinity
+            });
+            
+            // 設定字體大小與主編輯器一致
+            answerEditor.setSize(null, 'auto');
+            const cmElement = answerEditor.getWrapperElement();
+            cmElement.style.fontSize = currentFontSize + 'px';
+        }
+        
+        // 捲動到結果區域
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
 }
@@ -227,45 +328,7 @@ function generateDiffHTML(differences) {
         return '<div style="text-align: center; color: var(--text-muted);">無差異</div>';
     }
     
-    let html = '<div class="diff-header"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>發現以下錯誤：</div>';
-    
-    differences.forEach(diff => {
-        html += `<div class="diff-block">`;
-        html += `<div class="diff-line-label">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            第 ${diff.lineNum} 行
-        </div>`;
-        
-        if (diff.type === 'missing') {
-            html += `<div class="diff-line diff-removed">
-                <span class="diff-line-number">${diff.lineNum}</span>你的答案是空的
-            </div>`;
-            html += `<div class="diff-line diff-added">
-                <span class="diff-line-number">${diff.lineNum}</span>${escapeHtml(diff.reference) || '(空行)'}
-            </div>`;
-        } else if (diff.type === 'extra') {
-            html += `<div class="diff-line diff-removed">
-                <span class="diff-line-number">${diff.lineNum}</span>${escapeHtml(diff.answer)}
-            </div>`;
-            html += `<div class="diff-line diff-added">
-                <span class="diff-line-number">${diff.lineNum}</span>這行應該是空的或不存在
-            </div>`;
-        } else {
-            html += `<div class="diff-line diff-removed">
-                <span class="diff-line-number">${diff.lineNum}</span>${escapeHtml(diff.answer) || '(空行)'}
-            </div>`;
-            html += `<div class="diff-line diff-added">
-                <span class="diff-line-number">${diff.lineNum}</span>${escapeHtml(diff.reference) || '(空行)'}
-            </div>`;
-        }
-        
-        html += `</div>`;
-    });
-    
-    return html;
+    return '<div style="text-align: center; color: var(--text-muted);">請參考上方正確答案進行修正</div>';
 }
 
 // HTML 轉義
@@ -301,6 +364,15 @@ function updateFontSize() {
         cmElement.style.fontSize = currentFontSize + 'px';
         document.getElementById('font-size-display').textContent = currentFontSize;
         answerEditor.refresh();
+    }
+    
+    // 同時更新答案程式碼編輯器的字體大小
+    const answerCodeEditor = document.getElementById('answer-code-editor');
+    if (answerCodeEditor) {
+        const answerCmElement = answerCodeEditor.querySelector('.CodeMirror');
+        if (answerCmElement) {
+            answerCmElement.style.fontSize = currentFontSize + 'px';
+        }
     }
 }
 
